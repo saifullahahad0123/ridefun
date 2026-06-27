@@ -1,0 +1,224 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container mt-4">
+
+<h2 class="mb-4">
+ Route Details
+</h2>
+
+<div class="card shadow">
+
+<div class="card-body">
+
+<h3>
+<%= fromPlace %>
+→
+<%= toPlace %>
+</h3>
+
+<p>
+Driver:
+<%= route.driver.username %>
+
+<% if(route.driver && route.driver.isVerifiedDriver){ %>
+
+<span class="badge bg-success">
+✅ Verified Driver
+</span>
+
+<% } %>
+
+</p>
+
+
+<p>
+<i class="bi bi-car-front-fill"></i> Vehicle:
+<%= route.vehicleType %>
+</p>
+
+<p>
+<i class="bi bi-car-front-fill"></i> Vehicle No:
+<%= route.vehicleNumber %>
+</p>
+
+<p>
+<i class="bi bi-telephone-fill"></i> Contact:
+<%= route.contactNumber %>
+</p>
+
+<p>
+💺 Available Seats:
+<%= route.availableSeats %>
+</p>
+
+<p>
+<i class="bi bi-currency-rupee"></i> Fare:
+₹<%= fare %>
+</p>
+
+<p>
+<i class="bi bi-clock-fill"></i> Arrival Time:
+<%= arrivalTime %>
+</p>
+
+
+<p>
+
+Status:
+
+<% if(route.status === "active"){ %>
+
+<span class="badge bg-success">
+Active
+</span>
+
+<% } else if(route.status === "stopped"){ %>
+
+<span class="badge bg-danger">
+Stopped
+</span>
+
+<% } else if(route.status === "waiting"){ %>
+
+<span class="badge bg-secondary">
+Waiting
+</span>
+
+<% } else if(route.status === "cancelled"){ %>
+
+<span class="badge bg-dark">
+Cancelled
+</span>
+
+<% } %>
+
+</p>
+
+
+
+<hr>
+
+<% if(route.status === "active"){ %>
+
+<h4 class="mb-3">
+Reserve Seat
+</h4>
+
+<form
+action="/routes/<%= route._id %>/book"
+method="POST"
+>
+
+<input
+type="hidden"
+name="from"
+value="<%= fromPlace %>"
+
+>
+
+<input
+type="hidden"
+name="to"
+value="<%= toPlace %>"
+
+>
+
+<div class="mb-3">
+
+<label>
+Passenger Name
+</label>
+
+<input
+type="text"
+name="passengerName"
+class="form-control"
+required
+
+>
+
+</div>
+
+<div class="mb-3">
+
+<label>
+Phone Number
+</label>
+
+<input
+type="text"
+name="phoneNumber"
+class="form-control"
+required
+
+>
+
+</div>
+
+
+<div class="mb-3">
+
+<label>
+Seats
+</label>
+
+<input
+type="number"
+name="seatsBooked"
+id="seatsBooked"
+class="form-control"
+min="1"
+required
+
+>
+
+</div>
+
+<p>
+Total Fare:
+₹<span id="totalFare">0</span>
+</p>
+
+<script>
+
+const fare = Number("<%= fare %>");
+
+document
+.getElementById("seatsBooked")
+.addEventListener(
+"input",
+function(){
+
+document
+.getElementById("totalFare")
+.innerText =
+fare *
+(Number(this.value) || 0);
+
+}
+);
+
+</script>
+
+<button
+class="btn btn-success"
+
+>
+
+Book Now </button>
+
+</form>
+
+<% } else { %>
+
+<div class="alert alert-warning">
+Route is not active for booking
+</div>
+
+<% } %>
+
+</div>
+
+</div>
+
+</div>

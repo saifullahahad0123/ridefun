@@ -1,0 +1,164 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container mt-4">
+
+<h1 class="mb-4">
+All Routes
+</h1>
+
+<% if(routes.length === 0){ %>
+
+<div class="alert alert-warning">
+No Routes Found
+</div>
+
+<% } %>
+
+<div class="row">
+
+<% routes.forEach(route=>{ %>
+
+<div class="col-lg-6 mb-4">
+
+<div class="card shadow">
+
+<div class="card-body">
+
+<h4>
+ <%= route.vehicleType %>
+</h4>
+
+<p>
+<strong>Driver:</strong>
+<%= route.driver ?
+route.driver.username :
+"Not Assigned" %>
+</p>
+
+<p>
+<strong>Vehicle Number:</strong>
+<%= route.vehicleNumber %>
+</p>
+
+<p>
+<strong>Contact:</strong>
+<%= route.contactNumber %>
+</p>
+
+<p>
+<strong>Seats:</strong>
+<%= route.availableSeats %> /
+<%= route.totalSeats %>
+</p>
+
+<p>
+<strong>Status:</strong>
+
+<% if(route.status === "active"){ %>
+
+<span class="badge bg-success">
+Active
+</span>
+
+<% } else if(route.status === "stopped"){ %>
+
+<span class="badge bg-danger">
+Stopped
+</span>
+
+<% } else if(route.status === "cancelled"){ %>
+
+<span class="badge bg-dark">
+Cancelled
+</span>
+
+<% } else { %>
+
+<span class="badge bg-secondary">
+Waiting
+</span>
+
+<% } %>
+
+</p>
+
+<hr>
+
+<h5>
+ Route Stops
+</h5>
+
+<% if(route.stops && route.stops.length > 0){ %>
+
+<ul class="list-group mb-3">
+
+<% route.stops.forEach(stop=>{ %>
+
+<li class="list-group-item">
+
+<strong>
+<%= stop.from %>
+→
+<%= stop.to %>
+</strong>
+
+<br>
+
+ ₹<%= stop.fare %>
+
+<br>
+
+<%= stop.arrivalTime %>
+
+</li>
+
+<% }) %>
+
+</ul>
+
+<% } %>
+
+<p>
+ Created:
+<%= route.createdAt ?
+route.createdAt.toLocaleDateString() :
+"N/A" %>
+</p>
+
+<a
+href="/admin/routes/<%= route._id %>"
+class="btn btn-primary"
+>
+
+View Details
+
+</a>
+
+<form
+action="/admin/routes/<%= route._id %>?_method=DELETE"
+method="POST"
+class="d-inline"
+>
+
+<button
+class="btn btn-danger"
+onclick="return confirm('Delete this route?')"
+>
+
+Delete
+
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+<% }) %>
+
+</div>
+
+</div>

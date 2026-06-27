@@ -1,0 +1,128 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container mt-4">
+
+<h1>
+ User Details
+</h1>
+
+<div class="card shadow mb-4">
+
+<div class="card-body">
+
+<p>
+<strong>Name:</strong>
+<%= user.username %>
+</p>
+
+<p>
+<strong>Phone:</strong>
+<%= user.phone || "N/A" %>
+</p>
+
+<p>
+<strong>Email:</strong>
+<%= user.email || "N/A" %>
+</p>
+
+<p>
+<strong>Role:</strong>
+
+<% if(user.isAdmin){ %>
+
+Admin
+
+<% } else if(user.isDriver){ %>
+
+Driver
+
+<% } else { %>
+
+Passenger
+
+<% } %>
+
+</p>
+
+<p>
+<strong>Joined:</strong>
+
+<%= user.createdAt ?
+user.createdAt.toLocaleDateString() :
+"N/A" %>
+
+</p>
+
+</div>
+
+</div>
+
+<h3>
+ User Bookings
+</h3>
+
+<% if(bookings.length === 0){ %>
+
+<div class="alert alert-warning">
+
+No Bookings Found
+
+</div>
+
+<% } else { %>
+
+<table class="table table-bordered">
+
+<tr>
+
+<th>From</th>
+<th>To</th>
+<th>Seats</th>
+<th>Amount</th>
+<th>Status</th>
+
+</tr>
+
+<% bookings.forEach(booking=>{ %>
+
+<tr>
+
+<td>
+<%= booking.fromPlace %>
+</td>
+
+<td>
+<%= booking.toPlace %>
+</td>
+
+<td>
+<%= booking.seatsBooked %>
+</td>
+
+<td>
+₹<%= booking.totalAmount || 0 %>
+</td>
+
+<td>
+<%= booking.status %>
+</td>
+
+</tr>
+
+<% }) %>
+
+</table>
+
+<% } %>
+
+<a
+href="/admin/users"
+class="btn btn-secondary"
+
+>
+
+⬅ Back
+
+</a>
+
+</div>

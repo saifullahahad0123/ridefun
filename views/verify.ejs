@@ -1,0 +1,43 @@
+<% layout("/layouts/boilerplate") %>
+
+<h2 class="mb-4">
+
+    Verify OTP
+
+</h2>
+
+<form
+   action="/verify-otp"
+   method="POST"
+>
+
+    <input
+       type="hidden"
+       name="phone"
+       value="<%= phone %>"
+    >
+
+    <div class="mb-3">
+
+        <label>
+
+            Enter OTP
+
+        </label>
+
+        <input
+           type="text"
+           name="otp"
+           class="form-control"
+           required
+        >
+
+    </div>
+
+    <button class="btn btn-dark">
+
+        Verify OTP
+
+    </button>
+
+</form>

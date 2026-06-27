@@ -1,0 +1,177 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container mt-4">
+
+<h1 class="mb-4 text-center">
+ Admin - All Bookings
+</h1>
+
+<% if(bookings.length === 0){ %>
+
+<div class="alert alert-warning">
+No Bookings Found
+</div>
+
+<% } else { %>
+
+<div class="row">
+
+<% bookings.forEach(booking=>{ %>
+
+<div class="col-lg-6 mb-4">
+
+<div class="card shadow">
+
+<div class="card-header bg-dark text-white">
+
+<h5 class="mb-0">
+ Booking ID:
+<%= booking._id %>
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<h5>
+    <i class="bi bi-person-fill"></i>Passenger Details
+</h5>
+
+<p>
+<strong>Name:</strong>
+<%= booking.passengerName || "N/A" %>
+</p>
+
+<p>
+<strong>Phone:</strong>
+<%= booking.phoneNumber || "N/A" %>
+</p>
+
+<p>
+<strong>User:</strong>
+<%= booking.passenger ?
+booking.passenger.username :
+"N/A" %>
+</p>
+
+<hr>
+
+<h5>
+     Route Details
+</h5>
+
+<p>
+<strong>From:</strong>
+<%= booking.fromPlace %>
+</p>
+
+<p>
+<strong>To:</strong>
+<%= booking.toPlace %>
+</p>
+
+<p>
+<strong>Arrival Time:</strong>
+<%= booking.arrivalTime || "N/A" %>
+</p>
+
+<% if(booking.route){ %>
+
+<p>
+<strong>Vehicle:</strong>
+<%= booking.route.vehicleType %>
+</p>
+
+<p>
+<strong>Vehicle Number:</strong>
+<%= booking.route.vehicleNumber %>
+</p>
+
+<p>
+<strong>Contact:</strong>
+<%= booking.route.contactNumber %>
+</p>
+
+<% } %>
+
+<hr>
+
+<h5>
+<i class="bi bi-currency-rupee"></i> Booking Information
+</h5>
+
+<p>
+<strong>Seats Booked:</strong>
+<%= booking.seatsBooked %>
+</p>
+
+<p>
+<strong>Total Amount:</strong>
+₹<%= booking.totalAmount || 0 %>
+</p>
+
+<p>
+<strong>Status:</strong>
+
+<% if(booking.status === "confirmed"){ %>
+
+<span class="badge bg-success">
+Confirmed
+</span>
+
+<% } else if(booking.status === "cancelled"){ %>
+
+<span class="badge bg-danger">
+Cancelled
+</span>
+
+<% } else { %>
+
+<span class="badge bg-secondary">
+<%= booking.status %>
+</span>
+
+<% } %>
+
+</p>
+
+<p>
+<strong>Booking Date:</strong>
+
+<%= booking.createdAt ?
+booking.createdAt.toLocaleString() :
+"N/A" %>
+
+</p>
+
+<hr>
+
+<form
+action="/admin/bookings/<%= booking._id %>?_method=DELETE"
+method="POST"
+>
+
+<button
+class="btn btn-danger"
+onclick="return confirm('Delete this booking?')"
+>
+
+🗑 Delete Booking
+
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+<% }) %>
+
+</div>
+
+<% } %>
+
+</div>

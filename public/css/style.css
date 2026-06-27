@@ -1,0 +1,121 @@
+body{
+    background-color: #f5f7fa;
+    font-family: Arial, sans-serif;
+}
+
+
+/* HERO SECTION */
+
+.hero-section{
+    padding: 80px 20px;
+    background: linear-gradient(
+        135deg,
+        #0d6efd,
+        #0a58ca
+    );
+
+    color: white;
+
+    border-radius: 20px;
+
+    margin-top: 30px;
+}
+
+
+/* SEARCH BOX */
+
+.search-box{
+    background-color: white;
+
+    padding: 30px;
+
+    border-radius: 15px;
+}
+
+
+/* TRIP CARDS */
+
+.card{
+    border: none;
+
+    border-radius: 15px;
+
+    transition: 0.3s;
+}
+
+
+.card:hover{
+
+    transform: translateY(-5px);
+
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+
+}
+
+
+/* BUTTONS */
+
+.btn{
+    border-radius: 10px;
+}
+
+
+/* NAVBAR */
+
+.navbar-brand{
+    font-size: 1.5rem;
+}
+
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+    .hero-section{
+
+        padding: 50px 20px;
+
+    }
+
+}
+
+.trip-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+}
+
+.trip-actions .btn{
+    flex:1;
+    min-width:150px;
+}
+
+@media(max-width:768px){
+
+    .trip-actions{
+        flex-direction:column;
+    }
+
+    .trip-actions .btn{
+        width:100%;
+    }
+
+    .trip-actions form{
+        width:100%;
+    }
+
+    .trip-actions form .btn{
+        width:100%;
+    }
+
+}
+
+
+@media (max-width: 576px){
+
+.route-actions .btn{
+width:100%;
+margin-bottom:5px;
+}
+
+}

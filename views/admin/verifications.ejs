@@ -1,0 +1,110 @@
+<% layout("/layouts/boilerplate") %>
+
+<h2 class="mb-4">
+
+Driver Verifications
+
+</h2>
+
+<% for(let driver of drivers){ %>
+
+<div class="card mb-3">
+
+    <div class="card-body">
+
+        <h5>
+
+            <%= driver.username %>
+
+        </h5>
+
+        <p>
+
+            Status:
+
+            <% if(
+                driver.verificationStatus ===
+                "approved"
+            ){ %>
+
+                <span class="badge bg-success">
+
+                    Approved
+
+                </span>
+
+            <% } else if(
+                driver.verificationStatus ===
+                "rejected"
+            ){ %>
+
+                <span class="badge bg-danger">
+
+                    Rejected
+
+                </span>
+
+            <% } else { %>
+
+                <span class="badge bg-warning">
+
+                    Pending
+
+                </span>
+
+            <% } %>
+
+        </p>
+
+        <a
+        target="_blank"
+        href="/uploads/<%= driver.licenseImage %>"
+        class="btn btn-primary btn-sm"
+        >
+
+            View License
+
+        </a>
+
+        <a
+        target="_blank"
+        href="/uploads/<%= driver.rcImage %>"
+        class="btn btn-info btn-sm"
+        >
+
+            View RC
+
+        </a>
+
+        <br><br>
+
+        <% if(
+            driver.verificationStatus ===
+            "pending"
+        ){ %>
+
+        <a
+        href="/admin/verify-driver/<%= driver._id %>"
+        class="btn btn-success"
+        >
+
+            Approve
+
+        </a>
+
+        <a
+        href="/admin/reject-driver/<%= driver._id %>"
+        class="btn btn-danger"
+        >
+
+            Reject
+
+        </a>
+
+        <% } %>
+
+    </div>
+
+</div>
+
+<% } %>

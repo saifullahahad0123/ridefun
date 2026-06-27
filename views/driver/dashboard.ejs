@@ -1,0 +1,268 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container">
+
+<h1 class="mb-4">
+<i class="bi bi-car-front-fill"></i> Driver Dashboard
+</h1>
+
+
+
+<div class="row mb-4">
+
+<div class="col-md-3">
+<div class="card shadow text-center">
+<div class="card-body">
+<h5>Total Routes</h5>
+<h2><%= routes.length %></h2>
+</div>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card shadow text-center">
+<div class="card-body">
+<h5>Active Routes</h5>
+<h2>
+<%= routes.filter(route => route.status === "active").length %>
+</h2>
+</div>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card shadow text-center">
+<div class="card-body">
+<h5>Stopped Routes</h5>
+<h2>
+<%= routes.filter(route => route.status === "stopped").length %>
+</h2>
+</div>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card shadow text-center">
+<div class="card-body">
+<h5>Total Earnings</h5>
+<h2>₹<%= totalEarnings || 0 %></h2>
+</div>
+</div>
+</div>
+
+</div>
+
+<div class="mb-4">
+<a
+href="/routes/new"
+class="btn btn-primary"
+>
+<i class="bi bi-plus-circle-fill"></i> Create New Route
+</a>
+</div>
+
+<h2 class="mb-3">
+My Routes
+</h2>
+
+<% if(routes.length === 0){ %>
+
+<div class="alert alert-warning">
+No Routes Found
+</div>
+
+<% } %>
+
+<div class="row">
+
+<% routes.forEach(route => { %>
+
+<div class="col-lg-4 mb-4">
+
+<div class="card shadow">
+
+<div class="card-body">
+
+<h4>
+
+<%= route.stops && route.stops.length > 0 ? route.stops[0].from : "No Route" %>
+
+→
+
+<%= route.stops && route.stops.length > 0 ? route.stops[route.stops.length-1].to : "No Route" %>
+
+</h4>
+
+
+
+<p>
+<i class="bi bi-car-front-fill"></i> Vehicle:
+<%= route.vehicleType %>
+</p>
+
+<p>
+<i class="bi bi-car-front-fill"></i> Vehicle No:
+<%= route.vehicleNumber %>
+</p>
+
+<p>
+<i class="bi bi-telephone-fill"></i> Contact:
+<%= route.contactNumber %>
+</p>
+
+<p>
+<span class="material-symbols-outlined">
+airline_seat_recline_extra
+</span> Seats:
+<%= route.availableSeats %> /
+<%= route.totalSeats %>
+</p>
+
+<p>
+<i class="bi bi-clock-fill"></i> Created:
+<%= route.createdAt ? route.createdAt.toLocaleString() : "Not Available" %>
+</p>
+
+<p class="fw-bold">
+Route Segments:
+</p>
+
+<% if(route.stops && route.stops.length > 0){ %>
+
+<ul class="list-group mb-3">
+
+<% route.stops.forEach(stop => { %>
+
+<li class="list-group-item">
+
+<i class="bi bi-geo-alt-fill"></i> <%= stop.from %>
+
+→
+
+<%= stop.to %>
+
+|
+
+₹<%= stop.fare %>
+
+|
+
+<i class="bi bi-clock-fill"></i> <%= stop.arrivalTime %>
+
+</li>
+<hr>
+
+<% }) %>
+
+</ul>
+
+<% } %>
+
+<p>
+
+Status:
+
+<% if(route.status === "active"){ %>
+
+<span class="badge bg-success">
+Active
+</span>
+
+<% } else if(route.status === "stopped"){ %>
+
+<span class="badge bg-danger">
+Stopped
+</span>
+
+<% } else if(route.status === "cancelled"){ %>
+
+<span class="badge bg-dark">
+Cancelled
+</span>
+
+<% } else { %>
+
+<span class="badge bg-secondary">
+Waiting
+</span>
+
+<% } %>
+
+</p>
+
+
+
+
+<div class="d-flex flex-wrap gap-2 mt-3">
+
+<a
+href="/routes/<%= route._id %>/edit"
+class="btn btn-warning btn-sm"
+>
+<i class="bi bi-pencil-square"></i> Edit
+</a>
+
+<% if(route.status === "waiting" || route.status === "stopped"){ %>
+
+<a
+href="/routes/<%= route._id %>/start"
+class="btn btn-success btn-sm"
+>
+<i class="bi bi-play-circle-fill"></i> Start
+</a>
+
+<% } %>
+
+<% if(route.status === "active"){ %>
+
+<a
+href="/routes/<%= route._id %>/stop"
+class="btn btn-danger btn-sm"
+>
+<i class="bi bi-stop-circle-fill"></i> Stop
+</a>
+
+<% } %>
+
+<a
+href="/routes/<%= route._id %>/cancel"
+class="btn btn-secondary btn-sm"
+>
+<i class="bi bi-x-circle-fill"></i> Cancel
+</a>
+
+<a
+href="/routes/<%= route._id %>/activate"
+class="btn btn-primary btn-sm"
+>
+<i class="bi bi-arrow-clockwise"></i> Reopen
+</a>
+
+<form
+action="/routes/<%= route._id %>?_method=DELETE"
+method="POST"
+class="d-inline"
+>
+
+<button
+class="btn btn-danger btn-sm"
+onclick="return confirm('Delete this route?')"
+>
+<i class="bi bi-trash-fill"></i> Delete
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<% }) %>
+
+</div>
+
+</div>

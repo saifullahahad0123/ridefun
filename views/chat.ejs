@@ -1,0 +1,139 @@
+<% layout("/layouts/boilerplate") %>
+
+<h2 class="mb-4 text-center">
+
+    Trip Chat
+
+</h2>
+
+<div
+   id="chat-box"
+
+   class="border rounded p-3 mb-3 shadow-sm"
+
+   style="
+   height:500px;
+   overflow-y:scroll;
+   background:#f8f9fa;
+   border-radius:10px;
+   "
+>
+
+<% for(let message of messages){ %>
+
+<div
+
+class="d-flex mb-3
+
+<%=
+
+message.sender &&
+message.sender._id.toString() ===
+currentUser._id.toString()
+
+?
+
+'justify-content-end'
+
+:
+
+'justify-content-start'
+
+%>
+
+"
+
+>
+
+<div
+
+class="p-3 rounded shadow-sm"
+
+style="
+
+max-width:300px;
+
+background:
+
+<%=
+
+message.sender &&
+message.sender._id.toString() ===
+currentUser._id.toString()
+
+?
+
+'#198754'
+
+:
+
+'#2b3035'
+
+%>;
+
+color:white;
+
+border-radius:15px;
+
+"
+
+>
+
+<strong>
+
+<%= message.sender ?
+
+message.sender.username :
+
+"Unknown User"
+
+%>
+
+</strong>
+
+<br>
+
+<%= message.text %>
+
+</div>
+
+</div>
+
+<% } %>
+
+</div>
+
+<form id="chat-form">
+
+    <input
+       type="hidden"
+       id="tripId"
+       value="<%= trip._id %>"
+    >
+
+    <input
+       type="hidden"
+       id="userId"
+       value="<%= currentUser._id %>"
+    >
+
+    <div class="input-group">
+
+        <input
+           type="text"
+           id="message"
+
+           class="form-control shadow-sm"
+
+           placeholder="Type message..."
+        >
+
+        <button class="btn btn-success">
+
+            Send
+
+        </button>
+
+    </div>
+
+</form>

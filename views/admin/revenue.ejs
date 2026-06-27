@@ -1,0 +1,93 @@
+<% layout("/layouts/boilerplate") %>
+
+<h2 class="mb-4">
+
+Revenue Details
+
+</h2>
+
+<table class="table table-bordered">
+
+    <thead>
+
+        <tr>
+
+            <th>Passenger</th>
+            <th>Route</th>
+            <th>Fare</th>
+            <th>Seats</th>
+            <th>Total</th>
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        <% let grandTotal = 0; %>
+
+        <% bookings.forEach(booking => { %>
+
+            <% if(booking.trip){ %>
+
+                <% let amount =
+                booking.trip.fare *
+                booking.seatsBooked; %>
+
+                <% grandTotal += amount; %>
+
+                <tr>
+
+                    <td>
+
+                        <%= booking.passenger ?
+                        booking.passenger.username :
+                        "Unknown" %>
+
+                    </td>
+
+                    <td>
+
+                        <%= booking.trip.fromCity %>
+                        →
+                        <%= booking.trip.toCity %>
+
+                    </td>
+
+                    <td>
+
+                        ₹<%= booking.trip.fare %>
+
+                    </td>
+
+                    <td>
+
+                        <%= booking.seatsBooked %>
+
+                    </td>
+
+                    <td>
+
+                        ₹<%= amount %>
+
+                    </td>
+
+                </tr>
+
+            <% } %>
+
+        <% }) %>
+
+    </tbody>
+
+</table>
+
+<div class="alert alert-success">
+
+    <strong>
+
+        Total Revenue:
+        ₹<%= grandTotal %>
+
+    </strong>
+
+</div>

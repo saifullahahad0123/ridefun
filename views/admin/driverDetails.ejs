@@ -1,0 +1,114 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container mt-4">
+
+<h1 class="mb-4">
+ Driver Details
+</h1>
+
+<div class="card shadow mb-4">
+
+<div class="card-body">
+
+<h3>
+<%= driver.username %>
+</h3>
+
+<p>
+ Phone:
+<%= driver.phone || "N/A" %>
+</p>
+
+<p>
+Email:
+<%= driver.email || "N/A" %>
+</p>
+
+<p>
+ Verification:
+<%= driver.verificationStatus %>
+</p>
+
+<p>
+✅ Verified:
+<%= driver.isVerifiedDriver ? "Yes" : "No" %>
+</p>
+
+<p>
+Total Routes:
+<%= routes.length %>
+</p>
+
+<p>
+Total Earnings:
+₹<%= totalEarnings || 0 %>
+</p>
+
+</div>
+
+</div>
+
+<h3 class="mb-3">
+ Driver Routes
+</h3>
+
+<% if(routes.length === 0){ %>
+
+<div class="alert alert-warning">
+No Routes Found
+</div>
+
+<% } else { %>
+
+<div class="row">
+
+<% routes.forEach(route=>{ %>
+
+<div class="col-md-4 mb-3">
+
+<div class="card shadow">
+
+<div class="card-body">
+
+<p>
+ <%= route.vehicleType %>
+</p>
+
+<p>
+<%= route.vehicleNumber %>
+</p>
+
+<p>
+ <%= route.contactNumber %>
+</p>
+
+<p>
+ <%= route.availableSeats %>
+</p>
+
+<p>
+Status:
+<%= route.status %>
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<% }) %>
+
+</div>
+
+<% } %>
+
+<a
+href="/admin/drivers"
+class="btn btn-secondary"
+
+>
+
+⬅ Back </a>
+
+</div>

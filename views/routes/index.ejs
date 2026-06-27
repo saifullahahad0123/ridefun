@@ -1,0 +1,78 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container mt-4">
+
+<h2 class="mb-4"> Available Routes</h2>
+
+<% if(routes.length === 0){ %>
+
+<div class="alert alert-warning">
+No routes found
+</div>
+
+<% } %>
+
+<div class="row">
+
+<% routes.forEach(route=>{ %>
+
+<div class="col-lg-4 col-md-6 mb-4">
+
+<div class="card shadow-sm h-100">
+
+<div class="card-body">
+
+<h4>
+<%= route.stops[0].place %>
+→
+<%= route.stops[route.stops.length-1].place %>
+</h4>
+
+
+
+
+<p>
+<i class="bi bi-car-front-fill"></i> <strong>Vehicle:</strong>
+<%= route.vehicleType %>
+</p>
+
+<p>
+<i class="bi bi-car-front-fill"></i> <strong>Vehicle No:</strong>
+<%= route.vehicleNumber %>
+</p>
+
+<p>
+<i class="bi bi-telephone-fill"></i> <strong>Phone:</strong>
+<%= route.contactNumber %>
+</p>
+
+<p>
+<i class="bi bi-clock-fill"></i> <strong>Seats:</strong>
+<%= route.availableSeats %>
+</p>
+
+<p>
+<i class="bi bi-clock-fill"></i> <strong>Created:</strong>
+<%= route.createdAt.toDateString() %>
+</p>
+
+<a
+href="/routes/<%= route._id %>"
+class="btn btn-primary"
+>
+
+View Details
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<% }) %>
+
+</div>
+
+</div>

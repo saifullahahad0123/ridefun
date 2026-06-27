@@ -1,0 +1,136 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container mt-4">
+
+<h1 class="text-center mb-4">
+👥 Admin - All Users
+</h1>
+
+<% if(users.length === 0){ %>
+
+<div class="alert alert-warning">
+No Users Found
+</div>
+
+<% } else { %>
+
+<div class="row">
+
+<% users.forEach(user=>{ %>
+
+<div class="col-lg-4 mb-4">
+
+<div class="card shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+<%= user.username %>
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<p>
+<strong>User ID:</strong><br>
+<%= user._id %>
+</p>
+
+<p>
+<strong>Name:</strong>
+<%= user.username %>
+</p>
+
+<p>
+<strong>Phone:</strong>
+<%= user.phone || "N/A" %>
+</p>
+
+<p>
+<strong>Email:</strong>
+<%= user.email || "N/A" %>
+</p>
+
+<p>
+<strong>Role:</strong>
+
+<% if(user.isAdmin){ %>
+
+<span class="badge bg-danger">
+Admin
+</span>
+
+<% } else if(user.isDriver){ %>
+
+<span class="badge bg-success">
+Driver
+</span>
+
+<% } else { %>
+
+<span class="badge bg-secondary">
+Passenger
+</span>
+
+<% } %>
+
+</p>
+
+<p>
+<strong>Account Created:</strong><br>
+
+<%= user.createdAt ?
+user.createdAt.toLocaleDateString() :
+"N/A" %>
+
+</p>
+
+<hr>
+
+<div class="d-grid gap-2">
+
+<a
+href="/admin/users/<%= user._id %>"
+class="btn btn-primary"
+>
+
+View Details
+
+</a>
+
+<% if(!user.isAdmin){ %>
+
+<form
+action="/admin/users/<%= user._id %>?_method=DELETE"
+method="POST"
+>
+
+<button
+class="btn btn-danger w-100"
+onclick="return confirm('Delete this user?')"
+>
+
+Delete User
+
+</button>
+
+</form>
+
+<% } %>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<% }) %>
+
+</div>
+
+<% } %>
+
+</div>

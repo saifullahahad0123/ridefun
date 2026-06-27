@@ -1,0 +1,126 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container mt-4">
+
+<h1 class="text-center mb-4">
+<i class="bi bi-car-front-fill"></i>Admin - All Drivers
+</h1>
+
+<% if(drivers.length === 0){ %>
+
+<div class="alert alert-warning">
+No Drivers Found
+</div>
+
+<% } else { %>
+
+<div class="row">
+
+<% drivers.forEach(driver=>{ %>
+
+<div class="col-lg-4 mb-4">
+
+<div class="card shadow">
+
+<div class="card-header bg-dark text-white">
+
+<h5 class="mb-0">
+ <%= driver.username %>
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<p>
+<strong>User ID:</strong><br>
+<%= driver._id %>
+</p>
+
+<p>
+<strong>Name:</strong>
+<%= driver.username %>
+</p>
+
+<p>
+<strong>Phone:</strong>
+<%= driver.phone || "N/A" %>
+</p>
+
+<p>
+<strong>Email:</strong>
+<%= driver.email || "N/A" %>
+</p>
+
+<p>
+<strong>Driver Status:</strong>
+
+<% if(driver.isVerifiedDriver){ %>
+
+<span class="badge bg-success">
+Verified
+</span>
+
+<% } else { %>
+
+<span class="badge bg-warning text-dark">
+Not Verified
+</span>
+
+<% } %>
+
+</p>
+
+<p>
+<strong>Account Created:</strong><br>
+
+<%= driver.createdAt ?
+driver.createdAt.toLocaleDateString() :
+"N/A" %>
+
+</p>
+
+<hr>
+
+<div class="d-grid gap-2">
+
+<a
+href="/admin/drivers/<%= driver._id %>"
+class="btn btn-primary"
+>
+
+View Details
+
+</a>
+
+<form
+action="/admin/drivers/<%= driver._id %>?_method=DELETE"
+method="POST"
+>
+
+<button
+class="btn btn-danger w-100"
+onclick="return confirm('Delete this driver?')"
+>
+
+Delete Driver
+
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<% }) %>
+
+</div>
+
+<% } %>
+
+</div>

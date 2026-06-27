@@ -1,0 +1,116 @@
+<% layout("/layouts/boilerplate") %>
+
+<h1 class="mb-4">
+    My Bookings
+</h1>
+
+<% if(bookings.length === 0){ %>
+
+<div class="alert alert-warning">
+    No bookings yet
+</div>
+
+<% } %>
+
+<div class="row">
+
+<% for(let booking of bookings){ %>
+
+<% if(booking.route){ %>
+
+<div class="col-lg-4 mb-4">
+
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <h4>
+                <%= booking.fromPlace %>
+                →
+                <%= booking.toPlace %>
+            </h4>
+
+            <p>
+                <i class="bi bi-car-front-fill"></i>
+                <%= booking.route.vehicleType %>
+            </p>
+
+            <p>
+                <i class="bi bi-car-front-fill"></i>Vehicle No:
+                <%= booking.route.vehicleNumber %>
+            </p>
+
+            <p>
+                <span class="material-symbols-outlined">
+airline_seat_recline_extra
+</span> Seats:
+                <%= booking.seatsBooked %>
+            </p>
+
+            <p>
+                <i class="bi bi-telephone-fill"></i> Driver Contact:
+                <%= booking.route.contactNumber %>
+            </p>
+
+            <p>
+               <i class="bi bi-currency-rupee"></i> Total Fare:
+                ₹<%= booking.totalAmount || 0 %>
+            </p>
+
+<p>
+<i class="bi bi-clock-fill"></i> Arrival Time:
+<%= booking.arrivalTime || "N/A" %>
+</p>
+
+
+
+
+            <p>
+                <i class="bi bi-clock-fill"></i> Booked On:
+                <%= booking.createdAt.toDateString() %>
+            </p>
+
+            <p>
+                Status:
+
+                <% if(booking.route.status === "active"){ %>
+                    <span class="badge bg-success">
+                        Active
+                    </span>
+                <% } %>
+
+                <% if(booking.route.status === "waiting"){ %>
+                    <span class="badge bg-secondary">
+                        Waiting
+                    </span>
+                <% } %>
+
+                <% if(booking.route.status === "stopped"){ %>
+                    <span class="badge bg-warning">
+                        Stopped
+                    </span>
+                <% } %>
+
+                <% if(booking.route.status === "cancelled"){ %>
+                    <span class="badge bg-danger">
+                        Cancelled
+                    </span>
+                <% } %>
+
+            </p>
+
+           
+
+        
+        </div>
+
+    </div>
+
+</div>
+
+<% } %>
+
+<% } %>
+
+</div>
+

@@ -1,0 +1,231 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container py-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow-lg border-0">
+
+                <div class="card-header bg-primary text-white">
+
+                    <h2 class="mb-0">
+                         Create Route
+                    </h2>
+
+                </div>
+
+                <div class="card-body">
+
+                    <form action="/routes" method="POST">
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Vehicle Type
+                            </label>
+
+                            <input
+                                type="text"
+                                name="vehicleType"
+                                class="form-control"
+                                placeholder="e.g. Sumo, Bus, Tempo"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Vehicle Number
+                            </label>
+
+                            <input
+                                type="text"
+                                name="vehicleNumber"
+                                class="form-control"
+                                placeholder="JK01A1234"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Contact Number
+                            </label>
+
+                            <input
+                                type="text"
+                                name="contactNumber"
+                                class="form-control"
+                                placeholder="Enter Phone Number"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="mb-4">
+
+                            <label class="form-label">
+                                Total Seats
+                            </label>
+
+                            <input
+                                type="number"
+                                name="totalSeats"
+                                class="form-control"
+                                placeholder="Enter Seats"
+                                required
+                            >
+
+                        </div>
+
+                        <hr>
+
+                        <h4 class="mb-3">
+
+                            <i class="bi bi-geo-alt-fill"></i> Route Stops
+
+                        </h4>
+
+                        <div id="stops">
+
+                            <div id="routesContainer">
+
+<div class="routeRow row mb-2">
+
+<div class="col-md-3">
+<input
+type="text"
+name="from[]"
+placeholder="From"
+class="form-control"
+required>
+</div>
+
+<div class="col-md-3">
+<input
+type="text"
+name="to[]"
+placeholder="To"
+class="form-control"
+required>
+</div>
+
+<div class="col-md-2">
+<input
+type="number"
+name="fare[]"
+placeholder="Fare"
+class="form-control"
+required>
+</div>
+
+<div class="col-md-2">
+<input
+type="text"
+name="time[]"
+placeholder="2:00 PM"
+class="form-control"
+required>
+</div>
+
+</div>
+
+</div>
+
+<button
+type="button"
+class="btn btn-secondary"
+onclick="addRoute()"
+>
++ Add Route
+</button>
+<hr>
+                        <br>
+
+                        <button
+                            type="submit"
+                            class="btn btn-success w-100"
+                        >
+
+                             Create Route
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+<script>
+
+function addRoute(){
+
+const div =
+document.createElement("div");
+
+div.className =
+"routeRow row mb-2";
+
+div.innerHTML = `
+
+<div class="col-md-3">
+<input
+type="text"
+name="from[]"
+placeholder="From"
+class="form-control"
+required>
+</div>
+
+<div class="col-md-3">
+<input
+type="text"
+name="to[]"
+placeholder="To"
+class="form-control"
+required>
+</div>
+
+<div class="col-md-2">
+<input
+type="number"
+name="fare[]"
+placeholder="Fare"
+class="form-control"
+required>
+</div>
+
+<div class="col-md-2">
+<input
+type="text"
+name="time[]"
+placeholder="Time"
+class="form-control"
+required>
+</div>
+
+`;
+
+document
+.getElementById("routesContainer")
+.appendChild(div);
+
+}
+
+</script>

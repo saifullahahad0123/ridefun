@@ -1,0 +1,57 @@
+<% layout("/layouts/boilerplate") %>
+
+<h2>
+
+Driver Verification
+
+</h2>
+
+<form
+action="/driver/verify"
+method="POST"
+enctype="multipart/form-data"
+>
+
+<div class="mb-3">
+
+<label>
+
+Driving License
+
+</label>
+
+<input
+type="file"
+name="licenseImage"
+class="form-control"
+required
+>
+
+</div>
+
+<div class="mb-3">
+
+<label>
+
+Vehicle RC
+
+</label>
+
+<input
+type="file"
+name="rcImage"
+class="form-control"
+required
+>
+
+</div>
+
+<button
+class="btn btn-success"
+>
+
+Upload Documents
+
+</button>
+
+</form>

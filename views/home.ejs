@@ -1,0 +1,74 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="hero-section text-center">
+
+    <h1 class="display-4 fw-bold">
+        Book Shared Transport Across India
+    </h1>
+
+    <p class="lead mt-3">
+
+        Find buses, sumos, taxis,
+        and shared rides easily.
+
+    </p>
+
+</div>
+
+<div class="row justify-content-center mt-5">
+
+   <div class="container mt-5">
+
+<h2 class="mb-4">
+
+<i class="bi bi-search"></i> Search Route
+
+</h2>
+
+<form action="/search-route" method="GET">
+
+<div class="row">
+
+<div class="col-md-5 mb-2">
+
+<input
+type="text"
+name="from"
+placeholder="From (e.g. Sopore)"
+class="form-control"
+required
+>
+
+</div>
+
+<div class="col-md-5 mb-2">
+
+<input
+type="text"
+name="to"
+placeholder="To (e.g. Wagub)"
+class="form-control"
+required
+>
+
+</div>
+
+<div class="col-md-2 mb-2">
+
+<button
+class="btn btn-primary w-100"
+>
+
+Search
+
+</button>
+
+</div>
+
+</div>
+
+</form>
+
+</div>  
+
+</div>

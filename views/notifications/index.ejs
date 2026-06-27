@@ -1,0 +1,120 @@
+<% layout("/layouts/boilerplate") %>
+
+<h2>Notifications</h2>
+
+<form
+action="/notifications/delete-all?_method=DELETE"
+method="POST"
+>
+
+<button
+class="btn btn-danger"
+onclick="return confirm('Delete all notifications?')"
+>
+
+<i class="bi bi-trash"></i> Delete All Notifications
+
+</button>
+
+<hr>
+
+</form>
+
+<% if(notifications.length === 0){ %>
+
+<div class="alert alert-info">
+No notifications available
+</div>
+
+
+
+
+
+<% } %>
+
+<% for(let n of notifications){ %>
+
+<div class="card mb-3 shadow-sm">
+
+<div class="card-body">
+
+<h5><i class="bi bi-car-front-fill"></i> New Booking</h5>
+
+<p>
+<i class="bi bi-person-fill"></i><%= n.passengerName %>
+</p>
+
+<p>
+<i class="bi bi-telephone-fill"></i> <%= n.passengerPhone %>
+</p>
+
+<p>
+<i class="bi bi-geo-alt-fill"></i> <%= n.fromCity %>
+→
+<%= n.toCity %>
+</p>
+
+<p>
+<span class="material-symbols-outlined">
+airline_seat_recline_extra
+</span> Seats:
+<%= n.seatsBooked %>
+</p>
+
+<p>
+<i class="bi bi-currency-rupee"></i> Amount:
+₹<%= n.amount %>
+</p>
+
+<p>
+<i class="bi bi-clock-fill"></i> Arrival Time:
+<%= n.arrivalTime || "N/A" %>
+</p>
+
+<p>
+<i class="bi bi-clock-fill"></i>
+<%= n.createdAt.toLocaleString() %>
+</p>
+
+<form
+action="/notifications/<%= n._id %>?_method=DELETE"
+method="POST"
+class="mt-2"
+>
+
+<button
+class="btn btn-sm btn-danger"
+>
+
+Delete
+
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+<% } %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,29 @@
+<% layout("/layouts/boilerplate") %>
+
+<h2>
+
+Waitlist
+
+</h2>
+
+<% for(
+let user of users
+){ %>
+
+<div
+class="card mb-2"
+>
+
+<div
+class="card-body"
+>
+
+<%=
+user.passenger.username
+%>
+
+</div>
+
+</div>
+
+<% } %>

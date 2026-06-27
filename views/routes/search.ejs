@@ -1,0 +1,61 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container">
+
+<h2 class="mb-4">
+
+Search Results
+
+</h2>
+
+<% if(results.length===0){ %>
+
+<div class="alert alert-warning">
+
+No Route Found
+
+</div>
+
+<% } %>
+
+<div class="row">
+<% results.forEach(result=>{ %>
+
+<div class="card mb-3">
+
+<div class="card-body">
+
+<h4>
+<%= result.from %>
+→
+<%= result.to %>
+</h4>
+
+
+
+<p> <i class="bi bi-car-front-fill"></i> <%= result.vehicleType %></p>
+
+<p><i class="bi bi-currency-rupee"></i> ₹<%= result.fare %></p>
+
+<p><i class="bi bi-clock-fill"></i> <%= result.time %></p>
+
+<p><span class="material-symbols-outlined">
+airline_seat_recline_extra
+</span> <%= result.availableSeats %></p>
+
+<a
+href="/routes/<%= result.routeId %>?from=<%= result.from %>&to=<%= result.to %>"
+class="btn btn-success"
+>
+View Details
+</a>
+
+</div>
+
+</div>
+
+<% }) %>
+
+</div>
+
+</div>

@@ -1,0 +1,146 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container mt-4">
+
+<h2 class="mb-4">
+Edit Route
+</h2>
+
+<form
+action="/routes/<%= route._id %>?_method=PUT"
+method="POST"
+>
+
+<input
+type="text"
+name="vehicleType"
+value="<%= route.vehicleType %>"
+class="form-control mb-3"
+placeholder="Vehicle Type"
+required
+
+>
+
+<input
+type="text"
+name="vehicleNumber"
+value="<%= route.vehicleNumber %>"
+class="form-control mb-3"
+placeholder="Vehicle Number"
+required
+
+>
+
+<input
+type="text"
+name="contactNumber"
+value="<%= route.contactNumber %>"
+class="form-control mb-3"
+placeholder="Contact Number"
+required
+
+>
+
+<input
+type="number"
+name="totalSeats"
+value="<%= route.totalSeats %>"
+class="form-control mb-3"
+placeholder="Total Seats"
+required
+
+>
+
+<input
+type="number"
+name="availableSeats"
+value="<%= route.availableSeats %>"
+class="form-control mb-3"
+placeholder="Available Seats"
+required
+
+>
+
+<h4 class="mt-4">
+Route Segments
+</h4>
+
+<% route.stops.forEach((stop,index)=>{ %>
+
+<div class="card p-3 mb-3">
+
+<label class="fw-bold">
+From
+</label>
+
+<input
+type="text"
+name="from[]"
+value="<%= stop.from %>"
+class="form-control mb-2"
+required
+
+>
+
+<label class="fw-bold">
+To
+</label>
+
+<input
+type="text"
+name="to[]"
+value="<%= stop.to %>"
+class="form-control mb-2"
+required
+
+>
+
+<label class="fw-bold">
+Fare
+</label>
+
+<input
+type="number"
+name="fare[]"
+value="<%= stop.fare %>"
+class="form-control mb-2"
+required
+
+>
+
+<label class="fw-bold">
+Arrival Time
+</label>
+
+<input
+type="text"
+name="arrivalTime[]"
+value="<%= stop.arrivalTime %>"
+class="form-control mb-2"
+required
+
+>
+
+</div>
+
+<% }) %>
+
+<button
+type="submit"
+class="btn btn-success"
+
+>
+
+Update Route </button>
+
+<a
+href="/driver/dashboard"
+class="btn btn-secondary"
+
+>
+
+Cancel </a>
+
+</form>
+
+</div>

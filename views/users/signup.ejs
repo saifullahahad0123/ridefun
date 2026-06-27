@@ -1,0 +1,155 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container mt-5">
+
+<div class="row justify-content-center">
+
+<div class="col-md-6">
+
+<div class="card shadow">
+
+<div class="card-header text-center">
+
+<h2>
+<i class="bi bi-person-plus-fill"></i>  Sign Up
+</h2>
+
+</div>
+
+<div class="card-body">
+
+<form
+action="/signup"
+method="POST"
+>
+
+<div class="mb-3">
+
+<label class="form-label">
+Username
+</label>
+
+<input
+type="text"
+name="username"
+class="form-control"
+required
+
+>
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+Email
+</label>
+
+<input
+type="email"
+name="email"
+class="form-control"
+required
+
+>
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+Phone Number
+</label>
+
+<input
+type="tel"
+name="phone"
+class="form-control"
+pattern="[0-9]{10}"
+maxlength="10"
+placeholder="10 Digit Mobile Number"
+required
+
+>
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+Account Type
+</label>
+
+<select
+name="role"
+class="form-control"
+required
+
+>
+
+<option value="passenger">
+Passenger
+</option>
+
+<option value="driver">
+Driver
+</option>
+
+</select>
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+Password
+</label>
+
+<input
+type="password"
+name="password"
+class="form-control"
+minlength="8"
+maxlength="20"
+placeholder="8-20 Characters"
+required
+
+>
+
+</div>
+
+<button
+type="submit"
+class="btn btn-primary w-100"
+
+>
+
+Create Account
+
+</button>
+
+</form>
+
+<hr>
+
+<div class="text-center">
+
+Already have an account?
+
+<a href="/login">
+
+Login Here
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
