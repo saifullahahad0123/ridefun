@@ -85,8 +85,6 @@ app.set("views", path.join(__dirname, "views"));
 // Static Files
 app.use(express.static(path.join(__dirname, "public")));
 
-
-// MongoDB Connection
 main()
   .then(() => {
     console.log("MongoDB Connected");
@@ -95,9 +93,12 @@ main()
     console.log(err);
   });
 
+
 async function main() {
-  await mongoose.connect("process.env.ATLASDB_URL");
+  await mongoose.connect(process.env.ATLASDB_URL);
 }
+
+
 
 const sessionOptions = {
 
