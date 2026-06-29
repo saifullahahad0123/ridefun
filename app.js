@@ -128,8 +128,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.use(
-    new LocalStrategy(User.authenticate())
-);
+new LocalStrategy(
+{
+usernameField: "email"
+},
+User.authenticate()
+));
 
 passport.serializeUser(User.serializeUser());
 
@@ -363,7 +367,7 @@ const user =
 new User({
 
 username,
-email,
+email: email.toLowerCase(),
 phone,
 role
 
@@ -421,6 +425,103 @@ app.get("/login", (req, res) => {
 
 });
 
+// app.post("/login", async (req, res, next) => {
+
+// try{
+
+// const { email, password } = req.body;
+
+// // Find user by email
+// const user = await User.findOne({
+
+// email: email.toLowerCase()
+
+// });
+
+// if(!user){
+
+// req.flash(
+// "error",
+// "Invalid Email or Password"
+// );
+
+// return res.redirect("/login");
+
+// }
+
+// // Passport still needs username internally
+// req.body.username = user.username;
+
+// passport.authenticate(
+// "local",
+// {
+
+// failureRedirect:"/login",
+
+// failureFlash:true
+
+// },
+// (req, res, err) => {
+
+// if(err){
+
+// return next(err);
+
+// }
+
+// req.flash(
+// "success",
+// "Welcome Back!"
+// );
+
+// // Admin Login
+// if(req.user.role === "admin"){
+
+// return res.redirect("/admin/dashboard");
+
+// }
+
+// // Driver Login
+// if(req.user.role === "driver"){
+
+// if(!req.user.isVerifiedDriver){
+
+// req.flash(
+// "error",
+// "Your driver account is pending approval"
+// );
+
+// return res.redirect("/");
+
+// }
+
+// return res.redirect("/driver/dashboard");
+
+// }
+
+// // Passenger Login
+// return res.redirect("/");
+
+// }
+
+// )(req,res,next);
+
+// }catch(err){
+
+// console.log(err);
+
+// req.flash(
+// "error",
+// "Something went wrong"
+// );
+
+// res.redirect("/login");
+
+// }
+
+// });
+
+
 app.post(
 "/login",
 
@@ -439,51 +540,33 @@ req.flash(
 "Welcome Back!"
 );
 
-// Admin Login
-if(
-req.user.role === "admin"
-){
+if(req.user.role==="admin"){
 
-return res.redirect(
-"/admin/dashboard"
-);
+return res.redirect("/admin/dashboard");
 
 }
 
-// Driver Login
-if(
-req.user.role === "driver"
-){
+if(req.user.role==="driver"){
 
-// Optional verification check
-if(
-!req.user.isVerifiedDriver
-){
+if(!req.user.isVerifiedDriver){
 
 req.flash(
 "error",
-"Your driver account is pending approval"
+"Your driver account is pending approval."
 );
 
-return res.redirect(
-"/"
-);
+return res.redirect("/");
 
 }
 
-return res.redirect(
-"/driver/dashboard"
-);
+return res.redirect("/driver/dashboard");
 
 }
 
-// Passenger Login
-return res.redirect(
-"/"
-
-);
+return res.redirect("/");
 
 });
+
 app.get(
 "/logout",
 (req,res,next)=>{

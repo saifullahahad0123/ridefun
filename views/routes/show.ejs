@@ -47,7 +47,10 @@ Driver:
 </p>
 
 <p>
-💺 Available Seats:
+<span class="material-symbols-outlined">
+airline_seat_recline_extra
+</span>
+    Available Seats:
 <%= route.availableSeats %>
 </p>
 
@@ -201,13 +204,30 @@ fare *
 </script>
 
 <button
-class="btn btn-success"
+type="submit"
+id="bookBtn"
+class="btn btn-success">
 
->
+Book Seat
 
-Book Now </button>
+</button>
 
 </form>
+
+<script>
+document.querySelector("form").addEventListener("submit", function () {
+
+    const btn = document.getElementById("bookBtn");
+
+    btn.disabled = true;
+
+    btn.innerHTML = `
+    <span class="spinner-border spinner-border-sm"></span>
+    Booking...
+    `;
+
+});
+</script>
 
 <% } else { %>
 

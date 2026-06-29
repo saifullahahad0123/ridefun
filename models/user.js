@@ -14,6 +14,9 @@ required:true
 
 email:{
 type:String,
+lowercase:true,
+trim:true,
+required:true,
 unique:true,
 sparse:true,
 match:[
@@ -83,9 +86,9 @@ default:Date.now
 
 });
 
-userSchema.plugin(
-passportLocalMongoose
-);
+userSchema.plugin(passportLocalMongoose, {
+    usernameField: "email"
+});
 
 module.exports =
 mongoose.model(
