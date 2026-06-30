@@ -573,6 +573,8 @@ status:"completed"
 
 console.log("Total Earnings:", totalEarnings);
 
+
+
 res.render(
 "driver/dashboard.ejs",
 {
@@ -1001,6 +1003,10 @@ booking.totalAmount || 0
 
 });
 
+const cancelledRoutes = await Route.countDocuments({
+    status: "cancelled"
+});
+
 res.render(
 "admin/dashboard.ejs",
 {
@@ -1008,7 +1014,8 @@ users,
 drivers,
 routes,
 bookings,
-totalEarnings
+totalEarnings,
+cancelledRoutes
 }
 );
 
