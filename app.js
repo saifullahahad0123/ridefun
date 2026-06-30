@@ -969,55 +969,193 @@ app.get(
 
 
 
+// app.get(
+// "/admin/dashboard",
+// isLoggedIn,
+// isAdmin,
+// async(req,res)=>{
+
+// const users =
+// await User.find();
+
+// const drivers = await User.find({
+// role: "driver"
+// });
+
+// const routes =
+// await Route.find()
+// .populate("driver");
+
+// const bookings =
+// await Booking.find()
+// .populate("passenger")
+// .populate("route");
+
+// let totalEarnings = 0;
+
+// bookings.forEach(booking=>{
+
+// totalEarnings +=
+// Number(
+// booking.totalAmount || 0
+// );
+
+// });
+
+// const cancelledRoutes = await Route.countDocuments({
+//     status: "cancelled"
+// });
+
+// res.render(
+// "admin/dashboard.ejs",
+// {
+// users,
+// drivers,
+// routes,
+// bookings,
+// totalEarnings,
+// cancelledRoutes
+// }
+// );
+
+// });
+
+
 app.get(
 "/admin/dashboard",
 isLoggedIn,
 isAdmin,
 async(req,res)=>{
 
-const users =
-await User.find();
+try{
 
-const drivers =
-await User.find({
-isDriver:true
+// Users
+const totalUsers = await User.countDocuments();
+
+const totalDrivers = await User.countDocuments({
+role:"driver"
 });
 
-const routes =
-await Route.find()
-.populate("driver");
+const totalPassengers = await User.countDocuments({
+role:"passenger"
+});
 
-const bookings =
-await Booking.find()
-.populate("passenger")
-.populate("route");
+const totalAdmins = await User.countDocuments({
+role:"admin"
+});
 
-let totalEarnings = 0;
+// Routes
+const totalRoutes = await Route.countDocuments();
 
-bookings.forEach(booking=>{
+const activeRoutes = await Route.countDocuments({
+status:"active"
+});
 
-totalEarnings +=
-Number(
-booking.totalAmount || 0
-);
+const waitingRoutes = await Route.countDocuments({
+status:"waiting"
+});
 
+const completedRoutes = await Route.countDocuments({
+status:"completed"
 });
 
 const cancelledRoutes = await Route.countDocuments({
-    status: "cancelled"
+status:"cancelled"
 });
+
+// Bookings
+const totalBookings = await Booking.countDocuments();
+
+const completedBookings = await Booking.countDocuments({
+status:"completed"
+});
+
+const cancelledBookings = await Booking.countDocuments({
+status:"cancelled_by_driver"
+});
+
+// Earnings
+const earnings = await Booking.aggregate([
+
+{
+$match:{
+status:"completed"
+}
+},
+
+{
+$group:{
+_id:null,
+total:{
+$sum:"$totalAmount"
+}
+}
+
+}
+
+]);
+
+const totalEarnings =
+earnings.length > 0
+?
+earnings[0].total
+:
+0;
+
+// Recent Data
+const users = await User.find().sort({createdAt:-1}).limit(5);
+
+const routes = await Route.find()
+.populate("driver")
+.sort({createdAt:-1})
+.limit(5);
+
+const bookings = await Booking.find()
+.populate("passenger")
+.populate("route")
+.sort({createdAt:-1})
+.limit(10);
 
 res.render(
 "admin/dashboard.ejs",
 {
+
 users,
-drivers,
 routes,
 bookings,
-totalEarnings,
-cancelledRoutes
+
+totalUsers,
+totalDrivers,
+totalPassengers,
+totalAdmins,
+
+totalRoutes,
+activeRoutes,
+waitingRoutes,
+completedRoutes,
+cancelledRoutes,
+
+totalBookings,
+completedBookings,
+cancelledBookings,
+
+totalEarnings
+
 }
 );
+
+}catch(err){
+
+console.log(err);
+
+req.flash(
+"error",
+"Something went wrong."
+);
+
+res.redirect("/");
+
+}
 
 });
 
