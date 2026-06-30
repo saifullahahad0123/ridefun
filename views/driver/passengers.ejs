@@ -1,0 +1,188 @@
+
+<% layout("/layouts/boilerplate") %>
+
+<div class="container mt-4">
+
+<div class="d-flex justify-content-between align-items-center">
+
+<h2>
+
+<i class="bi bi-people-fill"></i>
+
+Passengers
+
+</h2>
+
+<a
+href="/driver/dashboard"
+class="btn btn-secondary">
+
+<i class="bi bi-arrow-left"></i>
+
+Back
+
+</a>
+
+</div>
+
+<hr>
+
+<div class="card shadow mb-4">
+
+<div class="card-body">
+
+<h5>
+
+<i class="bi bi-signpost-fill"></i>
+
+Route Information
+
+</h5>
+
+
+<p><strong>Available Seats:</strong> <%= route.availableSeats %></p>
+
+<p><strong>Status:</strong>
+
+<span class="badge bg-success">
+
+<%= route.status %>
+
+</span>
+
+</p>
+
+</div>
+
+</div>
+
+<% if(bookings.length===0){ %>
+
+<div class="alert alert-info text-center">
+
+No passengers have booked this route.
+
+</div>
+
+<% } %>
+
+<% bookings.forEach(booking=>{ %>
+
+<div class="card shadow-sm mb-3">
+
+<div class="card-body">
+
+<div class="row align-items-center">
+
+<div class="col-lg-8">
+
+<h5>
+
+<i class="bi bi-person-circle"></i>
+
+<%= booking.passenger.username %>
+
+</h5>
+
+<p>
+
+<i class="bi bi-envelope-fill"></i>
+
+<%= booking.passenger.email %>
+
+</p>
+
+<p>
+
+<i class="bi bi-telephone-fill"></i>
+
+<%= booking.passenger.phone %>
+
+</p>
+
+<p>
+
+<i class="bi bi-geo-alt-fill"></i>
+
+<%= booking.fromPlace %>
+
+→
+
+<%= booking.toPlace %>
+
+</p>
+
+<p>
+
+<span class="material-symbols-outlined">
+
+airline_seat_recline_extra
+
+</span>
+
+Seats:
+
+<%= booking.seatsBooked %>
+
+</p>
+
+<p>
+
+<i class="bi bi-currency-rupee"></i>
+
+₹<%= booking.totalAmount %>
+
+</p>
+
+</div>
+
+<div class="col-lg-4 text-lg-end">
+
+<% if(booking.status==="confirmed"){ %>
+
+<span class="badge bg-success mb-3">
+
+Confirmed
+
+</span>
+
+<br>
+
+<form
+action="/bookings/<%= booking._id %>/cancel"
+method="POST"
+onsubmit="return confirm('Cancel this passenger booking?')">
+
+<button
+class="btn btn-danger">
+
+<i class="bi bi-x-circle-fill"></i>
+
+Cancel Booking
+
+</button>
+
+</form>
+
+<% } else { %>
+
+<span class="badge bg-danger">
+
+Cancelled by Driver
+
+</span>
+
+<% } %>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<% }) %>
+
+</div>
+

@@ -76,29 +76,62 @@ required
 
 <div class="mb-3">
 
-<label class="form-label">
-Account Type
+<label class="form-label fw-bold">
+Choose Account Type
 </label>
 
-<select
+<div class="row">
+
+<div class="col-md-6 mb-2">
+
+<input
+type="radio"
+class="btn-check"
 name="role"
-class="form-control"
-required
+id="passenger"
+value="passenger"
+checked>
 
->
+<label
+class="btn btn-outline-primary w-100 py-3"
+for="passenger">
 
-<option value="passenger">
-Passenger
-</option>
+<i class="bi bi-person-fill fs-2"></i>
+<br>
+<strong>Passenger</strong>
+<br>
+<small>Book transport easily</small>
 
-<option value="driver">
-Driver
-</option>
-
-</select>
+</label>
 
 </div>
 
+<div class="col-md-6 mb-2">
+
+<input
+type="radio"
+class="btn-check"
+name="role"
+id="driver"
+value="driver">
+
+<label
+class="btn btn-outline-success w-100 py-3"
+for="driver">
+
+<i class="bi bi-car-front-fill fs-2"></i>
+<br>
+<strong>Driver</strong>
+<br>
+<small>Provide transport service</small>
+
+</label>
+
+</div>
+
+</div>
+
+</div>
 <div class="mb-3">
 
 <label class="form-label">

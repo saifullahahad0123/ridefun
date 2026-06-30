@@ -4,7 +4,6 @@ const mongoose = require("mongoose");
 const path = require("path");
 const ejsMate = require("ejs-mate");
 const methodOverride = require("method-override");
-
 const Booking = require("./models/booking");
 const session = require("express-session");
 const flash = require("connect-flash");
@@ -425,101 +424,7 @@ app.get("/login", (req, res) => {
 
 });
 
-// app.post("/login", async (req, res, next) => {
-
-// try{
-
-// const { email, password } = req.body;
-
-// // Find user by email
-// const user = await User.findOne({
-
-// email: email.toLowerCase()
-
-// });
-
-// if(!user){
-
-// req.flash(
-// "error",
-// "Invalid Email or Password"
-// );
-
-// return res.redirect("/login");
-
-// }
-
-// // Passport still needs username internally
-// req.body.username = user.username;
-
-// passport.authenticate(
-// "local",
-// {
-
-// failureRedirect:"/login",
-
-// failureFlash:true
-
-// },
-// (req, res, err) => {
-
-// if(err){
-
-// return next(err);
-
-// }
-
-// req.flash(
-// "success",
-// "Welcome Back!"
-// );
-
-// // Admin Login
-// if(req.user.role === "admin"){
-
-// return res.redirect("/admin/dashboard");
-
-// }
-
-// // Driver Login
-// if(req.user.role === "driver"){
-
-// if(!req.user.isVerifiedDriver){
-
-// req.flash(
-// "error",
-// "Your driver account is pending approval"
-// );
-
-// return res.redirect("/");
-
-// }
-
-// return res.redirect("/driver/dashboard");
-
-// }
-
-// // Passenger Login
-// return res.redirect("/");
-
-// }
-
-// )(req,res,next);
-
-// }catch(err){
-
-// console.log(err);
-
-// req.flash(
-// "error",
-// "Something went wrong"
-// );
-
-// res.redirect("/login");
-
-// }
-
-// });
+;
 
 
 app.post(
@@ -619,14 +524,54 @@ user:req.user._id
 createdAt:-1
 });
 
-let totalEarnings = 0;
+// Driver Earnings (Only Completed Bookings)
 
-bookings.forEach(booking=>{
+const earnings = await Booking.aggregate([
 
-totalEarnings +=
-Number(booking.totalAmount || 0);
+{
+$match:{
 
-});
+route:{ $in: routeIds },
+
+status:"completed"
+
+}
+},
+
+{
+$group:{
+
+_id:null,
+
+total:{
+$sum:"$totalAmount"
+}
+
+}
+
+}
+
+]);
+
+const totalEarnings =
+earnings.length > 0
+?
+earnings[0].total
+:
+0;
+
+console.log("Route IDs:", routeIds);
+
+console.log("Completed Bookings:",
+await Booking.find({
+
+route:{ $in: routeIds },
+
+status:"completed"
+
+}));
+
+console.log("Total Earnings:", totalEarnings);
 
 res.render(
 "driver/dashboard.ejs",
@@ -1673,7 +1618,7 @@ selectedStop.arrivalTime;
 const booking = new Booking({
 
 passenger: req.user._id,
-
+driver: route.driver,
 route: route._id,
 
 passengerName: req.body.passengerName,
@@ -1907,14 +1852,12 @@ res.redirect(
 
 });
 
-
-
-
 app.get(
 "/routes/:id/cancel",
 isLoggedIn,
-isDriver,
 async(req,res)=>{
+
+try{
 
 const route =
 await Route.findById(req.params.id);
@@ -1926,23 +1869,224 @@ req.flash(
 "Route not found"
 );
 
-return res.redirect(
-"/driver/dashboard"
-);
+return res.redirect("/driver/dashboard");
 
 }
 
-route.status =
-"cancelled";
+// Cancel Route
+route.status="cancelled";
+
+await route.save();
+
+// Find all confirmed bookings
+const bookings =
+await Booking.find({
+
+route:route._id,
+
+status:"confirmed"
+
+});
+
+// Restore seats
+let totalSeats=0;
+
+for(const booking of bookings){
+
+totalSeats += booking.seatsBooked;
+
+booking.status="cancelled_by_driver";
+
+await booking.save();
+
+// Notification
+await Notification.create({
+
+user:booking.passenger,
+
+title:"❌ Route Cancelled",
+
+type:"route_cancel",
+
+passengerName:booking.passengerName,
+
+passengerPhone:booking.phoneNumber,
+
+fromCity:booking.fromPlace,
+
+toCity:booking.toPlace,
+
+seatsBooked:booking.seatsBooked,
+
+amount:booking.totalAmount,
+
+arrivalTime:booking.arrivalTime,
+
+travelDate:booking.travelDate,
+
+message:`Your booking from ${booking.fromPlace} to ${booking.toPlace} has been cancelled by the driver.`
+
+});
+
+}
+
+// Restore seats
+route.availableSeats += totalSeats;
 
 await route.save();
 
 req.flash(
 "success",
-"Route Cancelled Successfully"
+"Route cancelled successfully."
 );
 
 res.redirect("/driver/dashboard");
+
+}catch(err){
+
+console.log(err);
+
+req.flash(
+"error",
+"Something went wrong"
+);
+
+res.redirect("/driver/dashboard");
+
+}
+
+});
+
+
+
+
+app.post(
+"/bookings/:id/cancel",
+isLoggedIn,
+async(req,res)=>{
+
+try{
+
+const booking = await Booking.findById(req.params.id);
+
+if(!booking){
+
+req.flash(
+"error",
+"Booking not found"
+);
+
+return res.redirect(req.get("Referrer") || "/driver/dashboard");
+
+}
+
+if(booking.status !== "confirmed"){
+
+req.flash(
+"error",
+"Booking already cancelled"
+);
+
+return res.redirect(req.get("Referrer") || "/driver/dashboard");
+
+}
+
+const route = await Route.findById(booking.route);
+
+if(!route){
+
+req.flash(
+"error",
+"Route not found"
+);
+
+return res.redirect(req.get("Referrer") || "/driver/dashboard");
+
+}
+
+// Return the booked seats
+route.availableSeats += booking.seatsBooked;
+
+await route.save();
+
+// Cancel booking
+booking.status = "cancelled_by_driver";
+
+await booking.save();
+
+// Notify passenger
+await Notification.create({
+
+user: booking.passenger,
+
+title: "❌ Booking Cancelled",
+
+type: "cancel",
+
+passengerName: booking.passengerName,
+
+passengerPhone: booking.phoneNumber,
+
+fromCity: booking.fromPlace,
+
+toCity: booking.toPlace,
+
+seatsBooked: booking.seatsBooked,
+
+amount: booking.totalAmount,
+
+arrivalTime: booking.arrivalTime,
+
+travelDate: booking.travelDate,
+
+message: `Your booking from ${booking.fromPlace} to ${booking.toPlace} has been cancelled by the driver.`
+
+});
+
+req.flash(
+"success",
+"Passenger booking cancelled successfully."
+);
+
+return res.redirect(req.get("Referrer") || "/driver/dashboard");
+
+}catch(err){
+
+console.log(err);
+
+req.flash(
+"error",
+"Something went wrong."
+);
+
+res.redirect("driver/passengers.ejs");
+
+}
+
+});
+
+
+
+
+app.get(
+"/routes/:id/passengers",
+isLoggedIn,
+async(req,res)=>{
+
+const route = await Route.findById(req.params.id);
+
+const bookings = await Booking.find({
+route:req.params.id
+})
+.populate("passenger");
+
+res.render(
+"driver/passengers.ejs",
+{
+route,
+bookings
+}
+);
 
 });
 
@@ -1953,23 +2097,60 @@ isLoggedIn,
 isDriver,
 async(req,res)=>{
 
-const route =
-await Route.findById(req.params.id);
+try{
 
-route.status =
-"waiting";
+const route = await Route.findById(req.params.id);
+
+if(!route){
+
+req.flash("error","Route not found");
+
+return res.redirect("/driver/dashboard");
+
+}
+
+// Delete all bookings for this route
+// await Booking.deleteMany({
+// route: route._id
+// });
+
+// Delete notifications for this driver
+await Notification.deleteMany({
+user: req.user._id
+});
+
+// Reset route
+route.status = "waiting";
+
+// Restore seats
+route.availableSeats = route.totalSeats;
+
+// Update departure date/time
+route.travelDate = new Date();
 
 await route.save();
 
 req.flash(
 "success",
-"Route Reopened"
+"Route reopened successfully."
 );
 
 res.redirect("/driver/dashboard");
 
-});
+}catch(err){
 
+console.log(err);
+
+req.flash(
+"error",
+"Something went wrong."
+);
+
+res.redirect("/driver/dashboard");
+
+}
+
+});
 
 app.get(
 "/routes/:id/start",
@@ -1998,25 +2179,97 @@ res.redirect("/driver/dashboard");
 
 });
 
+// app.get(
+// "/routes/:id/stop",
+// isLoggedIn,
+// isDriver,
+// async(req,res)=>{
+
+// const route =
+// await Route.findById(req.params.id);
+
+// route.status = "stopped";
+
+// await route.save();
+
+// req.flash(
+// "success",
+// "Route Stopped Successfully"
+// );
+
+// res.redirect("/driver/dashboard");
+
+// });
+
+
 app.get(
-"/routes/:id/stop",
+"/routes/:id/complete",
 isLoggedIn,
-isDriver,
 async(req,res)=>{
 
-const route =
-await Route.findById(req.params.id);
+try{
 
-route.status = "stopped";
+const route = await Route.findById(req.params.id);
+
+if(!route){
+
+req.flash("error","Route not found");
+
+return res.redirect("/driver/dashboard");
+
+}
+
+route.status="completed";
 
 await route.save();
 
+const bookings = await Booking.find({
+
+route:route._id,
+
+status:"confirmed"
+
+});
+
+for(const booking of bookings){
+
+booking.status="completed";
+
+await booking.save();
+
+}
+
+const updatedBookings = await Booking.find({
+route: route._id
+});
+
+console.log(updatedBookings);
+
 req.flash(
+
 "success",
-"Route Stopped Successfully"
+
+"Trip completed successfully."
+
 );
 
 res.redirect("/driver/dashboard");
+
+}catch(err){
+
+console.log(err);
+
+req.flash(
+
+"error",
+
+"Something went wrong."
+
+);
+
+res.redirect("/driver/dashboard");
+
+}
 
 });
 

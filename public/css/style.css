@@ -119,3 +119,38 @@ margin-bottom:5px;
 }
 
 }
+
+
+.card h2{
+    font-size:2rem;
+    font-weight:bold;
+}
+
+@media (max-width:768px){
+
+.card h2{
+    font-size:1.5rem;
+}
+
+.card h6{
+    font-size:0.9rem;
+}
+
+}
+
+@media (max-width: 768px) {
+
+    .routeRow .col-md-3,
+    .routeRow .col-md-2 {
+
+        margin-bottom: 15px;
+
+    }
+
+    #stops button {
+
+        width: 100%;
+
+    }
+
+}

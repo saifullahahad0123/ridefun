@@ -29,16 +29,20 @@ const routeSchema = new mongoose.Schema({
 
     availableSeats:Number,
 
-    status:{
-        type:String,
-        enum:[
-            "waiting",
-            "active",
-            "stopped",
-            "cancelled"
-        ],
-        default:"waiting"
-    },
+status:{
+
+type:String,
+
+enum:[
+"waiting",
+"active",
+"completed",
+"cancelled"
+],
+
+default:"waiting"
+
+},
 
     stops:[stopSchema]
 

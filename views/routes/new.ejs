@@ -94,58 +94,62 @@
 
                         <div id="stops">
 
-                            <div id="routesContainer">
+    <div id="routesContainer">
 
-<div class="routeRow row mb-2">
+        <div class="routeRow row mb-3">
 
-<div class="col-md-3">
-<input
-type="text"
-name="from[]"
-placeholder="From"
-class="form-control"
-required>
+            <div class="col-md-3 mb-3">
+                <input
+                    type="text"
+                    name="from[]"
+                    placeholder="From"
+                    class="form-control"
+                    required>
+            </div>
+
+            <div class="col-md-3 mb-3">
+                <input
+                    type="text"
+                    name="to[]"
+                    placeholder="To"
+                    class="form-control"
+                    required>
+            </div>
+
+            <div class="col-md-2 mb-3">
+                <input
+                    type="number"
+                    name="fare[]"
+                    placeholder="Fare"
+                    class="form-control"
+                    required>
+            </div>
+
+            <div class="col-md-2 mb-3">
+                <input
+                    type="text"
+                    name="time[]"
+                    placeholder="2:00 PM"
+                    class="form-control"
+                    required>
+            </div>
+
+        </div>
+
+    </div>
+
+    <button
+        type="button"
+        class="btn btn-secondary mt-2"
+        onclick="addRoute()">
+
+        <i class="bi bi-plus-circle"></i> Add Route
+
+    </button>
+
+    <hr>
+
 </div>
-
-<div class="col-md-3">
-<input
-type="text"
-name="to[]"
-placeholder="To"
-class="form-control"
-required>
-</div>
-
-<div class="col-md-2">
-<input
-type="number"
-name="fare[]"
-placeholder="Fare"
-class="form-control"
-required>
-</div>
-
-<div class="col-md-2">
-<input
-type="text"
-name="time[]"
-placeholder="2:00 PM"
-class="form-control"
-required>
-</div>
-
-</div>
-
-</div>
-
-<button
-type="button"
-class="btn btn-secondary"
-onclick="addRoute()"
->
-+ Add Route
-</button>
-<hr>
                         <br>
 
                         <button

@@ -7,6 +7,11 @@ type:mongoose.Schema.Types.ObjectId,
 ref:"User"
 },
 
+driver:{
+type:mongoose.Schema.Types.ObjectId,
+ref:"User"
+},
+
 route:{
 type:mongoose.Schema.Types.ObjectId,
 ref:"Route"
@@ -36,6 +41,12 @@ expires:172800
 
 status:{
 type:String,
+enum:[
+"confirmed",
+"completed",
+"cancelled",
+"cancelled_by_driver"
+],
 default:"confirmed"
 }
 

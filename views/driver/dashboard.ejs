@@ -8,49 +8,51 @@
 
 
 
-<div class="row mb-4">
+<div class="row g-3 mb-4">
 
-<div class="col-md-3">
-<div class="card shadow text-center">
-<div class="card-body">
-<h5>Total Routes</h5>
-<h2><%= routes.length %></h2>
-</div>
-</div>
+    <div class="col-6 col-md-3">
+        <div class="card shadow h-100 text-center">
+            <div class="card-body">
+                <h6>Total Routes</h6>
+                <h2><%= routes.length %></h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <div class="card shadow h-100 text-center">
+            <div class="card-body">
+                <h6>Active Routes</h6>
+                <h2>
+                    <%= routes.filter(route => route.status === "active").length %>
+                </h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <div class="card shadow h-100 text-center">
+            <div class="card-body">
+                <h6>Stopped Routes</h6>
+                <h2>
+                    <%= routes.filter(route => route.status === "stopped").length %>
+                </h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <div class="card shadow h-100 text-center">
+            <div class="card-body">
+                <h6>Total Earnings</h6>
+                <h2>₹<%= totalEarnings || 0 %></h2>
+            </div>
+        </div>
+    </div>
+
 </div>
 
-<div class="col-md-3">
-<div class="card shadow text-center">
-<div class="card-body">
-<h5>Active Routes</h5>
-<h2>
-<%= routes.filter(route => route.status === "active").length %>
-</h2>
-</div>
-</div>
-</div>
 
-<div class="col-md-3">
-<div class="card shadow text-center">
-<div class="card-body">
-<h5>Stopped Routes</h5>
-<h2>
-<%= routes.filter(route => route.status === "stopped").length %>
-</h2>
-</div>
-</div>
-</div>
-
-<div class="col-md-3">
-<div class="card shadow text-center">
-<div class="card-body">
-<h5>Total Earnings</h5>
-<h2>₹<%= totalEarnings || 0 %></h2>
-</div>
-</div>
-</div>
-
-</div>
 
 <div class="mb-4">
 <a
@@ -60,6 +62,9 @@ class="btn btn-primary"
 <i class="bi bi-plus-circle-fill"></i> Create New Route
 </a>
 </div>
+
+
+
 
 <h2 class="mb-3">
 My Routes
@@ -202,6 +207,18 @@ class="btn btn-warning btn-sm"
 <i class="bi bi-pencil-square"></i> Edit
 </a>
 
+
+
+<a
+href="/routes/<%= route._id %>/passengers"
+class="btn btn-info btn-sm">
+
+<i class="bi bi-people-fill"></i>
+
+View Passengers
+
+</a>
+
 <% if(route.status === "waiting" || route.status === "stopped"){ %>
 
 <a
@@ -213,13 +230,16 @@ class="btn btn-success btn-sm"
 
 <% } %>
 
-<% if(route.status === "active"){ %>
+<% if(route.status==="active"){ %>
 
 <a
-href="/routes/<%= route._id %>/stop"
-class="btn btn-danger btn-sm"
->
-<i class="bi bi-stop-circle-fill"></i> Stop
+href="/routes/<%= route._id %>/complete"
+class="btn btn-success btn-sm">
+
+<i class="bi bi-check-circle-fill"></i>
+
+Complete Trip
+
 </a>
 
 <% } %>

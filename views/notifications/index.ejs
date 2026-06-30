@@ -1,92 +1,228 @@
+
 <% layout("/layouts/boilerplate") %>
 
-<h2>Notifications</h2>
+<div class="container mt-4">
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+
+<h2>
+<i class="bi bi-bell-fill text-warning"></i>
+Notifications
+</h2>
+
+<% if(notifications.length > 0){ %>
 
 <form
 action="/notifications/delete-all?_method=DELETE"
 method="POST"
->
+onsubmit="return confirm('Delete all notifications?')">
 
-<button
-class="btn btn-danger"
-onclick="return confirm('Delete all notifications?')"
->
+<button class="btn btn-danger">
 
-<i class="bi bi-trash"></i> Delete All Notifications
+<i class="bi bi-trash"></i>
+Delete All
 
 </button>
+
+</form>
+
+<% } %>
+
+</div>
 
 <hr>
 
-</form>
-
 <% if(notifications.length === 0){ %>
 
-<div class="alert alert-info">
-No notifications available
+<div class="alert alert-info text-center">
+
+<i class="bi bi-bell-slash-fill fs-4"></i>
+
+<br>
+
+No Notifications Available
+
 </div>
-
-
-
-
 
 <% } %>
 
-<% for(let n of notifications){ %>
+<% notifications.forEach(notification=>{ %>
 
-<div class="card mb-3 shadow-sm">
+<div class="card shadow-sm mb-3
+
+<%=
+notification.type==="route_cancel" ||
+notification.type==="cancel"
+
+?
+
+"border-danger"
+
+:
+
+notification.type==="arrival"
+
+?
+
+"border-warning"
+
+:
+
+"border-success"
+
+%>">
 
 <div class="card-body">
 
-<h5><i class="bi bi-car-front-fill"></i> New Booking</h5>
+<h5>
 
-<p>
-<i class="bi bi-person-fill"></i><%= n.passengerName %>
+<% if(notification.type==="booking"){ %>
+
+<i class="bi bi-car-front-fill text-success"></i>
+
+<% } %>
+
+<% if(notification.type==="route_cancel"){ %>
+
+<i class="bi bi-x-circle-fill text-danger"></i>
+
+<% } %>
+
+<% if(notification.type==="cancel"){ %>
+
+<i class="bi bi-person-x-fill text-danger"></i>
+
+<% } %>
+
+<% if(notification.type==="arrival"){ %>
+
+<i class="bi bi-clock-fill text-warning"></i>
+
+<% } %>
+
+<%= notification.title || "Notification" %>
+
+</h5>
+
+<% if(notification.message){ %>
+
+<p class="mb-2">
+
+<%= notification.message %>
+
 </p>
 
-<p>
-<i class="bi bi-telephone-fill"></i> <%= n.passengerPhone %>
-</p>
+<% } %>
+
+<% if(notification.passengerName){ %>
 
 <p>
-<i class="bi bi-geo-alt-fill"></i> <%= n.fromCity %>
+
+<i class="bi bi-person-fill"></i>
+
+<strong>Passenger:</strong>
+
+<%= notification.passengerName %>
+
+</p>
+
+<% } %>
+
+<% if(notification.passengerPhone){ %>
+
+<p>
+
+<i class="bi bi-telephone-fill"></i>
+
+<strong>Phone:</strong>
+
+<%= notification.passengerPhone %>
+
+</p>
+
+<% } %>
+
+<% if(notification.fromCity && notification.toCity){ %>
+
+<p>
+
+<i class="bi bi-geo-alt-fill"></i>
+
+<strong>Route:</strong>
+
+<%= notification.fromCity %>
+
 →
-<%= n.toCity %>
+
+<%= notification.toCity %>
+
 </p>
 
+<% } %>
+
+<% if(notification.seatsBooked){ %>
+
 <p>
+
 <span class="material-symbols-outlined">
 airline_seat_recline_extra
-</span> Seats:
-<%= n.seatsBooked %>
+</span>
+
+<strong>Seats:</strong>
+
+<%= notification.seatsBooked %>
+
 </p>
 
-<p>
-<i class="bi bi-currency-rupee"></i> Amount:
-₹<%= n.amount %>
-</p>
+<% } %>
+
+<% if(notification.amount){ %>
 
 <p>
-<i class="bi bi-clock-fill"></i> Arrival Time:
-<%= n.arrivalTime || "N/A" %>
+
+<i class="bi bi-currency-rupee"></i>
+
+<strong>Amount:</strong>
+
+₹<%= notification.amount %>
+
 </p>
 
+<% } %>
+
+<% if(notification.arrivalTime){ %>
+
 <p>
+
 <i class="bi bi-clock-fill"></i>
-<%= n.createdAt.toLocaleString() %>
+
+<strong>Arrival:</strong>
+
+<%= notification.arrivalTime %>
+
 </p>
+
+<% } %>
+
+<small class="text-muted">
+
+<i class="bi bi-calendar-event"></i>
+
+<%= notification.createdAt.toLocaleString() %>
+
+</small>
+
+<hr>
 
 <form
-action="/notifications/<%= n._id %>?_method=DELETE"
-method="POST"
-class="mt-2"
->
+action="/notifications/<%= notification._id %>?_method=DELETE"
+method="POST">
 
-<button
-class="btn btn-sm btn-danger"
->
+<button class="btn btn-outline-danger btn-sm">
 
-Delete
+<i class="bi bi-trash"></i>
+
+Delete Notification
 
 </button>
 
@@ -96,25 +232,7 @@ Delete
 
 </div>
 
-<% } %>
+<% }) %>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+</div>
 

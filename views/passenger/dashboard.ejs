@@ -18,6 +18,39 @@
 
 <% if(booking.route){ %>
 
+    <% if(booking.status==="confirmed"){ %>
+
+<span class="badge bg-success">
+
+Confirmed
+
+</span>
+
+<% } %>
+
+<% if(booking.status==="cancelled_by_driver"){ %>
+
+<span class="badge bg-danger">
+
+Cancelled by Driver
+
+</span>
+
+<% } %>
+
+<% if(booking.status==="completed"){ %>
+
+<span class="badge bg-primary">
+
+Completed
+
+</span>
+
+<% } %>
+
+
+
+
 <div class="col-lg-4 mb-4">
 
     <div class="card shadow-sm">
